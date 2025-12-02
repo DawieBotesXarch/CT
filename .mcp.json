@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "docs-rag": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["mcp_server/rag_server.py"],
+      "description": "Semantic search across project documentation using RAG"
+    }
+  }
+}

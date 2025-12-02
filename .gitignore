@@ -1,0 +1,34 @@
+# Claude Code local settings
+.claude/settings.local.json
+
+# Environment variables
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencies (language-specific, add as needed)
+node_modules/
+vendor/
+__pycache__/
+*.pyc
+bin/
+obj/
+
+# ChromaDB vector database (local RAG)
+.chroma/
