@@ -5,6 +5,11 @@
       "command": "python",
       "args": ["mcp_server/rag_server.py"],
       "description": "Semantic search across project documentation using RAG"
+    },
+    "openmemory": {
+      "type": "http",
+      "url": "http://localhost:8080/mcp",
+      "description": "Persistent long-term memory for AI systems"
     }
   }
 }

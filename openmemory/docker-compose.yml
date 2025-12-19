@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  openmemory:
+    # Building from local source since image pull is denied
+    build:
+      context: ./temp-build/backend
+      dockerfile: Dockerfile
+
+    # If you have access to the registry, you can uncomment this instead:
+    # image: ghcr.io/caviraoss/openmemory:latest
+
+    container_name: openmemory-ct2
+    restart: unless-stopped
+    ports:
+      - "8080:8080"  # Adjust if port conflicts with other services
+    volumes:
+      - ./data:/data
+    environment:
+      # Core Configuration
+      - OM_PORT=8080
+      - OM_MODE=standard
+      - OM_TIER=hybrid
+      - OM_DB_PATH=/data/openmemory.sqlite
+
+      # Embeddings Configuration
+      - OM_EMBEDDINGS=synthetic  # Options: synthetic, openai, gemini, ollama
+      - OM_EMBEDDING_FALLBACK=synthetic
+      - OM_EMBED_MODE=simple
+      - OM_VEC_DIM=256
+
+      # Optional: API Key Protection
+      # - OM_API_KEY=your-secret-key
+
+      # Optional: OpenAI Configuration (if OM_EMBEDDINGS=openai)
+      # - OPENAI_API_KEY=sk-xxx
+      # - OM_OPENAI_BASE_URL=https://api.openai.com/v1
+
+      # Optional: Gemini Configuration (if OM_EMBEDDINGS=gemini)
+      # - GEMINI_API_KEY=xxx
+
+      # Optional: Ollama Configuration (if OM_EMBEDDINGS=ollama)
+      # - OLLAMA_URL=http://localhost:11434
+
+      # Memory & Search Settings
+      - OM_MIN_SCORE=0.3
+      - OM_MAX_PAYLOAD_SIZE=1000000
+
+    healthcheck:
+      test: ['CMD-SHELL', 'node -e "require(''http'').get(''http://localhost:8080/health'', (res) => process.exit(res.statusCode === 200 ? 0 : 1)).on(''error'', () => process.exit(1))"']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+networks:
+  default:
+    name: openmemory-network

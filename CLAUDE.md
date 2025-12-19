@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a **Claude Code Template Project** - a reusable, language-agnostic template for efficient AI-assisted development. It includes custom agents, slash commands, workflows, and best practices configurations.
 
+We are running Claude.code on a Windows machine, so cmds should be Windows based.
+
 **Purpose**: Provide a "living template" that can be dropped into any new project to immediately leverage Claude Code's full capabilities.
 
 ## Custom Agents Available
@@ -198,6 +200,56 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - Breaking changes
 - Performance problems
 - Unfamiliar technology
+
+## OpenMemory - Persistent AI Memory
+
+This project uses OpenMemory MCP for persistent memory across conversations.
+
+### Always Store Important Information
+
+**CRITICAL**: Proactively store important information to OpenMemory during every conversation using `openmemory_store`.
+
+### What to Store Automatically
+- **Project Decisions**: Architecture choices, tech stack selections, design patterns adopted
+- **User Preferences**: Coding style, preferred libraries, development workflows
+- **Important Context**: Project constraints, business logic, domain knowledge
+- **Learnings**: Bug fixes, optimization discoveries, pattern insights
+- **Standards**: Naming conventions, file organization, testing approaches
+
+### What NOT to Store
+- Temporary debugging information
+- Code snippets (use files instead)
+- Trivial or obvious decisions
+- Sensitive data (passwords, API keys, secrets)
+
+### Memory Usage Patterns
+
+**At Conversation Start:**
+- Query OpenMemory to retrieve relevant project context
+- Reinforce critical memories to maintain salience
+
+**During Development:**
+- Store significant decisions and learnings immediately
+- Tag memories appropriately for easy retrieval
+- Use sectors: semantic (facts), procedural (how-to), episodic (events)
+
+**Memory Structure:**
+```json
+{
+  "content": "Clear, concise description of the knowledge",
+  "tags": ["relevant", "searchable", "tags"],
+  "metadata": {
+    "project": "CT2",
+    "category": "architecture|preference|learning",
+    "date": "YYYY-MM-DD"
+  }
+}
+```
+
+### Salience Management
+- Important memories start with high salience (0.8-1.0)
+- Reinforce critical memories periodically
+- Let trivial memories decay naturally
 
 ## Continuous Improvement
 

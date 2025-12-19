@@ -1,0 +1,16 @@
+# OpenMemory data directory - contains SQLite database
+data/
+
+# Docker volumes
+volumes/
+
+# Temporary build files - cloned from GitHub
+temp-build/
+
+# Backup files
+*.backup
+*.sqlite-backup
+backups/
+
+# Logs
+*.log
