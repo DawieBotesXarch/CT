@@ -32,3 +32,4 @@ obj/
 
 # ChromaDB vector database (local RAG)
 .chroma/
+

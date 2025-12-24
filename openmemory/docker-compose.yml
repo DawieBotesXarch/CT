@@ -1,5 +1,13 @@
 version: "3.8"
 
+# ============================================
+# WHEN COPYING TO A NEW PROJECT:
+# 1. Change "openmemory-ct2" to "openmemory-YOURPROJECT" (line 17, 64)
+# 2. Change external port "8080" to unique port (line 20 - LEFT side only!)
+# 3. DO NOT change internal port ":8080" or OM_PORT (always 8080)
+# See COPY-TO-NEW-PROJECT.md for details
+# ============================================
+
 services:
   openmemory:
     # Building from local source since image pull is denied
@@ -10,15 +18,15 @@ services:
     # If you have access to the registry, you can uncomment this instead:
     # image: ghcr.io/caviraoss/openmemory:latest
 
-    container_name: openmemory-ct2
+    container_name: openmemory-ct2  # CHANGE THIS for new projects
     restart: unless-stopped
     ports:
-      - "8080:8080"  # Adjust if port conflicts with other services
+      - "8080:8080"  # CHANGE LEFT number only for new projects! Right must stay 8080
     volumes:
       - ./data:/data
     environment:
       # Core Configuration
-      - OM_PORT=8080
+      - OM_PORT=8080  # DO NOT CHANGE - Always 8080 (internal port)
       - OM_MODE=standard
       - OM_TIER=hybrid
       - OM_DB_PATH=/data/openmemory.sqlite
@@ -55,4 +63,4 @@ services:
 
 networks:
   default:
-    name: openmemory-network
+    name: openmemory-ct2-network  # CHANGE THIS for new projects

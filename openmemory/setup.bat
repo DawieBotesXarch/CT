@@ -27,7 +27,7 @@ if not exist "temp-build" (
 REM Build and start the container
 echo.
 echo Building and starting OpenMemory container...
-docker compose up -d --build
+docker compose -p openmemory-ct2 up -d --build
 
 REM Wait a bit for container to start
 echo.

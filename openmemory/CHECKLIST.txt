@@ -1,0 +1,40 @@
+╔════════════════════════════════════════════════════════════════╗
+║         OpenMemory Multi-Project Setup Checklist              ║
+║                                                                ║
+║  When copying to a new project, change ONLY these:            ║
+╚════════════════════════════════════════════════════════════════╝
+
+[ ] 1. Choose project ID: _____________ (e.g., "myapp", "api")
+[ ] 2. Choose external port: ________ (e.g., 8080, 8082, 8083)
+
+Files to Edit:
+─────────────────────────────────────────────────────────────────
+
+[ ] docker-compose.yml
+    Line 21: container_name: openmemory-[PROJECTID]
+    Line 24: ports: "[EXTERNAL]:8080"  ← ONLY change left side!
+    Line 66: name: openmemory-[PROJECTID]-network
+
+[ ] setup.bat
+    Line 30: docker compose -p openmemory-[PROJECTID] up -d --build
+    Line 40: http://localhost:[EXTERNAL]/health
+    Line 43: openmemory-[PROJECTID]
+    Line 51: http://localhost:[EXTERNAL]
+    Line 58: openmemory-[PROJECTID]
+
+[ ] start.bat
+    Line 3: -p openmemory-[PROJECTID]
+    Line 4: http://localhost:[EXTERNAL]
+
+[ ] stop.bat
+    Line 3: -p openmemory-[PROJECTID]
+    Line 4: Update project name
+
+DO NOT CHANGE:
+─────────────────────────────────────────────────────────────────
+✗ Internal port (right side of "XXXX:8080") - Always 8080
+✗ OM_PORT environment variable - Always 8080
+✗ Healthcheck port - Always localhost:8080
+✗ Any build configuration or paths
+
+See COPY-TO-NEW-PROJECT.md for detailed instructions.
