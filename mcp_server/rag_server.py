@@ -19,9 +19,8 @@ from pathlib import Path
 from typing import List, Dict, Optional
 import subprocess
 
-import chromadb
-from chromadb.config import Settings
-from sentence_transformers import SentenceTransformer
+# NOTE: chromadb, sentence_transformers are imported LAZILY inside initialize_rag()
+# to avoid blocking MCP server startup (~13s of import time would cause connection timeout)
 from mcp.server import Server
 from mcp.types import Tool, TextContent
 
@@ -36,13 +35,22 @@ INDEX_SCRIPT_PATH = "scripts/index_docs.py"
 embedding_model = None
 chroma_client = None
 collection = None
+_rag_initialized = False
 
 
 def initialize_rag():
-    """Initialize RAG components (embedding model and ChromaDB)"""
-    global embedding_model, chroma_client, collection
+    """Initialize RAG components (embedding model and ChromaDB) with lazy imports"""
+    global embedding_model, chroma_client, collection, _rag_initialized
+
+    if _rag_initialized:
+        return
 
     try:
+        # Lazy import heavy dependencies (chromadb ~2s, sentence_transformers ~11s)
+        import chromadb
+        from chromadb.config import Settings
+        from sentence_transformers import SentenceTransformer
+
         # Load embedding model
         if embedding_model is None:
             sys.stderr.write("Loading embedding model...\n")
@@ -66,6 +74,8 @@ def initialize_rag():
             # Get collection
             collection = chroma_client.get_collection(COLLECTION_NAME)
             sys.stderr.write(f"Connected to collection: {COLLECTION_NAME}\n")
+
+        _rag_initialized = True
 
     except Exception as e:
         sys.stderr.write(f"Error initializing RAG: {e}\n")
@@ -174,9 +184,10 @@ async def reindex_documentation() -> str:
 
         if result == "success":
             # Reset global state to reload collection
-            global chroma_client, collection
+            global chroma_client, collection, _rag_initialized
             chroma_client = None
             collection = None
+            _rag_initialized = False
 
             sys.stderr.write("Re-indexing completed successfully\n")
             return "Re-indexing completed successfully"
