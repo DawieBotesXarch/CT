@@ -12,7 +12,7 @@ services:
   openmemory:
     # Building from local source since image pull is denied
     build:
-      context: ./temp-build/backend
+      context: ./temp-build/packages/openmemory-js
       dockerfile: Dockerfile
 
     # If you have access to the registry, you can uncomment this instead:
